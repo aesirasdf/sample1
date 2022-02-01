@@ -42,4 +42,15 @@ class PostController extends Controller
         }
         return redirect()->route("posts-index");
     }
+
+    public function update(Request $request, $id){
+        $post = Post::find($id);
+        if(is_null($post))
+            abort(404);
+        else if($post->user_id == auth()->user()->id)
+            $post->update($request->all());
+        else
+            abort(403);
+        return redirect()->route("posts-index");
+    }
 }

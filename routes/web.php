@@ -32,5 +32,6 @@ Route::prefix('profile')->group(function () {
 Route::prefix('posts')->group(function () {
     Route::get('/', [App\Http\Controllers\PostController::class, 'index'])->name("posts-index");
     Route::post('/', [App\Http\Controllers\PostController::class, 'store'])->name("posts-store");
+    Route::patch('/{id}', [App\Http\Controllers\PostController::class, 'update'])->name("posts-update");
     Route::delete('/{id}', [App\Http\Controllers\PostController::class, 'destroy'])->name("posts-delete");
 });

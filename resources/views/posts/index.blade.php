@@ -29,32 +29,77 @@
                         <div class="card-body">
                             <div class="mb-1 text-left">
                                 <h5 class="card-title d-inline">{{ $post->User->Profile->firstname . " " . $post->User->Profile->lastname }}</h5>
-                                <div class="d-inline float-right">
-                                    <div class="dropdown">
-                                        <a type="button" data-toggle="dropdown" aria-expanded="false">
-                                            <i class="fas fa-ellipsis-h"></i>
-                                        </a>
-                                        <div class="dropdown-menu">
-                                            <div class="dropdown-item">
-                                                <form action="{{ route("posts-delete", ["id" => $post->id]) }}" method="POST">
-                                                    @csrf
-                                                    @method("DELETE")
-                                                    <input class="toText w-100 text-left" type="submit"  value="Delete">
-                                                </form>
+                                @if($post->user_id == auth()->user()->id)
+                                    <div class="d-inline float-right">
+                                        <div class="dropdown">
+                                            <a type="button" data-toggle="dropdown" aria-expanded="false">
+                                                <i class="fas fa-ellipsis-h"></i>
+                                            </a>
+                                            <div class="dropdown-menu">
+                                                <div class="dropdown-item">
+                                                    <form action="{{ route("posts-delete", ["id" => $post->id]) }}" method="POST">
+                                                        @csrf
+                                                        @method("DELETE")
+                                                        <input class="toText w-100 text-left" type="submit"  value="Delete">
+                                                    </form>
+                                                </div>
+                                                <a class="dropdown-item edit-button" data-id="{{ $post->id }}" data-message="{{ $post->message }}">Edit</a>
                                             </div>
-                                            <a class="dropdown-item" href="#">Edit</a>
                                         </div>
                                     </div>
-                                </div>
+                                @endif
                             </div>
                             <h6 class="card-subtitle mb-2 text-muted">{{ date_format(date_create($post->created_at), "F d, Y h:i A") }}</h6>
                             <p class="card-text">{{ $post->message }}</p>
-                            <a href="#" class="card-link">Card link</a>
-                            <a href="#" class="card-link">Another link</a>
+                            {{-- <a href="#" class="card-link">Card link</a>
+                            <a href="#" class="card-link">Another link</a> --}}
                         </div>
                     </div>
                 </div>
             @endforeach
         </div>
     </div>
+@endsection
+
+@section("modals")
+    <div class="modal" id="post-edit-modal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title">Edit Post</h5>
+                <button type="button" class="close" id="edit-close-button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <form id="post-edit-form" action="" method="POST">
+                        @csrf
+                        @method("PATCH")
+                        <textarea placeholder="What's on your mind?" name="message" id="update-message" class="form-control"></textarea>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="post-update-save" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
+
+@section('scripts')
+    <script>
+        $(document).ready(function(){
+            $(".edit-button").on("click", function(){
+                $("#post-edit-form").attr("action", "/posts/" + $(this).attr("data-id"));
+                $("#update-message").html($(this).attr("data-message"));
+                $("#post-edit-modal").modal("show");
+            });
+            $("#edit-close-button").click(function(){
+                $("#post-edit-modal").modal("hide");
+            });
+            $("#post-update-save").click(function(){
+                $("#post-edit-form").submit();
+            });
+        });
+    </script>
 @endsection
