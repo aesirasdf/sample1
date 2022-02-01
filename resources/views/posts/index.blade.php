@@ -30,12 +30,14 @@
                             <div class="mb-1 text-left">
                                 <h5 class="card-title d-inline">{{ $post->User->Profile->firstname . " " . $post->User->Profile->lastname }}</h5>
                                 @if($post->user_id == auth()->user()->id)
+                                {{-- @if(true) --}}
                                     <div class="d-inline float-right">
                                         <div class="dropdown">
                                             <a type="button" data-toggle="dropdown" aria-expanded="false">
                                                 <i class="fas fa-ellipsis-h"></i>
                                             </a>
                                             <div class="dropdown-menu">
+                                                <a class="dropdown-item edit-button" data-id="{{ $post->id }}" data-message="{{ $post->message }}">Edit</a>
                                                 <div class="dropdown-item">
                                                     <form action="{{ route("posts-delete", ["id" => $post->id]) }}" method="POST">
                                                         @csrf
@@ -43,7 +45,6 @@
                                                         <input class="toText w-100 text-left" type="submit"  value="Delete">
                                                     </form>
                                                 </div>
-                                                <a class="dropdown-item edit-button" data-id="{{ $post->id }}" data-message="{{ $post->message }}">Edit</a>
                                             </div>
                                         </div>
                                     </div>
