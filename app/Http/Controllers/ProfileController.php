@@ -18,7 +18,7 @@ class ProfileController extends Controller
         return view("profile.create");
     }
 
-    public function store(Request $request){
+    public function update(Request $request){
         $this->validate($request, [
             "firstname" => "required|max:25",
             "lastname" => "required|max:25"
@@ -34,6 +34,6 @@ class ProfileController extends Controller
                 "lastname" => $data['lastname']
             ]
         );
-
+        return redirect()->route("home");
     }
 }

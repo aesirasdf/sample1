@@ -1,0 +1,9 @@
+.rounded-3{
+    border-radius: 30px;
+}
+
+.toText{
+    padding: 0;
+    background-color: rgba(0, 0, 0, 0);
+    border: 0;
+}
